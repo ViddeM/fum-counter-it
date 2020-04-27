@@ -12,7 +12,18 @@
         {{Header}}
     </h2>
     <div style="margin-top: 100px; display: flex; flex-direction: column; align-items: center; justify-content: center">
-            {{content}}
+      {{content}}
+      <div />
+      {{content_two}}
+      <div />
+      <p>Passed goals</p>
+      {% for passed in passed_goals %}
+        <p>{{passed}}</p>
+      {% endfor %}
+      <p>Remaining goals</p>
+      {% for remaining in remaining_goals %}
+        <p>{{remaining}}</p>
+      {% endfor %}
     </div>
   </body>
 </html>
