@@ -1,0 +1,6 @@
+flas
+flask-restful
+flask-cors
+pony
+psycopg2
+requests
