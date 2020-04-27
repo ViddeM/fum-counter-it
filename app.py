@@ -30,7 +30,8 @@ def get_it_votes(json_data):
 @app.route("/")
 def index():
     last_checked, it_votes = get_votes()
-    text = "As of " + str(last_checked) + " there are " + str(it_votes) + " IT votes"
+    date = last_checked.strftime("%Y-%m-%d %H:%M:%S")
+    text = "As of " + date + " there are " + str(it_votes) + " IT votes"
     return flask.render_template('page.html', content=text, title="Fum election IT votes")
 
 
