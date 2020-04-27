@@ -13,6 +13,7 @@ api = Api(app)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 total_it_students = 627
+total_students = 11296
 
 goals = [
     {
@@ -43,7 +44,7 @@ def get_votes():
     it_votes = get_it_votes(json_data)
     diff = get_most_votes(json_data, it_votes)
 
-    return last_checked, it_votes, diff
+    return last_checked, it_votes, diff, int(json_data["total_votes"])
 
 
 def get_it_votes(json_data):
@@ -64,28 +65,28 @@ def get_most_votes(json_data, it_votes):
     if diff < 1:
         return "IT is number 1!!"
 
-    return "That is " + str(diff) + " more than " + highest_section
-
-
+    return "That is " + str(diff) + " less than " + highest_section
 
 
 @app.route("/")
 def index():
-    last_checked, it_votes, diff = get_votes()
+    last_checked, it_votes, diff, total_votes = get_votes()
     date = last_checked.strftime("%Y-%m-%d %H:%M:%S")
     it_percent = it_votes / total_it_students * 100
-    text = "As of " + date + " there are " + str(it_votes) + " IT votes, that is " + str("{:.1f}".format(it_percent)) + "%"
+    total_percent = total_votes / total_students * 100
+    text = "As of " + date + " there are " + str(it_votes) + " IT votes, that is " + str("{:.1f}".format(it_percent)) + "%."
+    text_2 = "In total over all divisions the number of votes the number of votes are at " + str(total_votes) + ", that is " + str("{:.1f}".format(total_percent)) + "%"
 
     passed = []
     remaining = []
 
     for goal in goals:
-        if goal["percent"] <= it_percent:
+        if goal["percent"] <= total_percent:
             passed.append(str(goal["percent"]) + "% -- " + goal["event"])
         else:
             remaining.append(str(goal["percent"]) + "% -- " + goal["event"])
 
-    return flask.render_template('page.html', content=text, title="Fum election IT votes", content_two=diff, passed_goals=passed, remaining_goals=remaining)
+    return flask.render_template('page.html', content=text, content_two=text_2, title="Fum election IT votes", content_three=diff, passed_goals=passed, remaining_goals=remaining)
 
 
 
