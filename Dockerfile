@@ -13,7 +13,7 @@ RUN useradd fum_counter_it
 
 COPY . .
 
-RUN chown -R secretary_manager /usr/src/fum-counter-it
+RUN chown -R fum_counter_it /usr/src/fum-counter-it
 
 USER fum_counter_it
 
