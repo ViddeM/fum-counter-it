@@ -1,14 +1,16 @@
-FROM ubuntu:18.04
+FROM python:3-alpine
 
-LABEL maintainer="Vidar Magnusson <docker@vidarmagnusson.com>"
+WORKDIR /usr/src/fum-counter-it/
 
-RUN apt-get update
-RUN apt-get install -y python3 python3-dev python3-pip nginx
-RUN pip3 install uwsgi
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY ./ ./app
-WORKDIR ./app
+RUN useradd fum-counter-it
 
-RUN pip3 install -r requirements.txt
+USER fum-counter-it
 
-CMD service nginx start && uwsgi -s /tmp/uwsgi.sock --chmod-socket=666 --manage-script-name --mount /=app:app
+ENV FLASK_ENV production
+
+EXPOSE 5000
+
+CMD ["sh", "start.sh"]
